@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex">
+<title>Back to Tally</title>
+<!--
+  Where Enable Banking sends the browser after a bank sign-in, and from here
+  back into the app.
+
+  Enable Banking only redirects to an https address registered for the
+  application, and the app has none of its own, so this static page stands in:
+  it takes the ?code=…&state=… it was sent with and opens
+  com.taher.calories://bank-return with the same query, which the app's
+  intent filter catches (AndroidManifest.xml, BankBridge.kt).
+
+  The code is useless without the private key that never leaves the phone,
+  and the app checks `state` against the sign-in it started. Nothing on this
+  page is sent anywhere: no requests, no analytics, no third-party anything.
+-->
+<style>
+  :root { color-scheme: light dark; --page: #fbfaf7; --ink: #1d2430; --muted: #5f6672; --action: #232c38; --on-action: #fafafa; }
+  @media (prefers-color-scheme: dark) { :root { --page: #12161c; --ink: #f2f1ee; --muted: #a9adb3; --action: #e8e6e1; --on-action: #141920; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--page); color: var(--ink);
+         font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding: 24px; }
+  main { width: 100%; max-width: 420px; text-align: center; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  p { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
+  a.button { display: block; min-height: 48px; line-height: 48px; border-radius: 10px; background: var(--action); color: var(--on-action);
+             font-weight: 700; text-decoration: none; }
+  .small { font-size: 13px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Back to Tally</h1>
+  <p id="text">Opening the app to finish connecting your bank…</p>
+  <a class="button" id="open" href="#">Open Tally</a>
+  <p class="small" id="note">If nothing happens, tap the button. This page sends nothing anywhere.</p>
+</main>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search)
+    var keep = new URLSearchParams()
+    ;['code', 'state', 'error', 'error_description'].forEach(function (k) {
+      var v = q.get(k)
+      if (v !== null && v.length < 4096) keep.set(k, v)
+    })
+    // The code is not left in the address bar or the history.
+    history.replaceState(null, '', location.pathname)
+    var open = document.getElementById('open')
+    if (!keep.get('state')) {
+      document.getElementById('title').textContent = 'Nothing to pass on'
+      document.getElementById('text').textContent = 'This page finishes a bank sign-in started from Tally. Start it again from Money → Connect a bank.'
+      open.style.display = 'none'
+      return
+    }
+    var query = keep.toString()
+    // Chrome opens an intent: link reliably; other browsers take the scheme itself.
+    var intent = 'intent://bank-return?' + query + '#Intent;scheme=com.taher.calories;end'
+    var scheme = 'com.taher.calories://bank-return?' + query
+    var isAndroidChrome = /Android/.test(navigator.userAgent) && /Chrome\//.test(navigator.userAgent)
+    open.href = isAndroidChrome ? intent : scheme
+    if (keep.get('error')) {
+      document.getElementById('text').textContent = 'The bank did not give access. Opening the app to say so…'
+    }
+    setTimeout(function () { location.href = open.href }, 150)
+  })()
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex">
+<title>Tally privacy</title>
+<style>
+  :root { color-scheme: light dark; --page: #fbfaf7; --ink: #1d2430; --muted: #5f6672; }
+  @media (prefers-color-scheme: dark) { :root { --page: #12161c; --ink: #f2f1ee; --muted: #a9adb3; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding: 32px 16px; }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 28px 0 6px; }
+  p, li { color: var(--muted); }
+  p { margin: 0 0 12px; }
+  ul { margin: 0 0 12px; padding-left: 20px; }
+  .lede { color: var(--ink); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Privacy</h1>
+  <p class="lede">Tally is a personal budgeting app. It is used only by the person who made it and is not offered to anyone else.</p>
+
+  <h2>What Tally reads</h2>
+  <p>Through Enable Banking, and only after you approve it at your bank: the names and identifiers of the accounts you choose, their balances, and their transactions. Tally can only read. It cannot make payments or move money.</p>
+
+  <h2>Where it is kept</h2>
+  <ul>
+    <li>On your phone, in the app's own storage. Android's cloud backup is turned off for the app.</li>
+    <li>If you turn on sync, copies go to a server you run yourself, encrypted on the phone under a passphrase only you know. The server stores them without being able to read them.</li>
+  </ul>
+
+  <h2>What never happens</h2>
+  <p>Your data is never sold, shared, used for advertising, or sent to any AI service.</p>
+
+  <h2>How long</h2>
+  <p>Bank access lasts at most 180 days. You can end it at any time with Disconnect in the app, or at your bank. Erasing your data in the app deletes it from the phone and from your server.</p>
+
+  <h2>This website</h2>
+  <p>These pages make no requests, set no cookies, and store nothing.</p>
+</main>
+</body>
+</html>
